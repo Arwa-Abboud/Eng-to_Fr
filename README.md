@@ -1,2 +1,2 @@
-# LLM_model
-deploying llm model
+# Enflish to French
+deploy translation  model
