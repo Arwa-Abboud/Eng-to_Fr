@@ -1,2 +1,2 @@
-# Enflish to French
+# English to French
 deploy translation  model
