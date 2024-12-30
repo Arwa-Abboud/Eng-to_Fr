@@ -79,3 +79,24 @@ from keras.callbacks import  EarlyStopping
 
 early_stop = EarlyStopping(monitor = 'val_accuracy', patience = 10)
 final_model = model.fit(eng_padded, fr_padded, epochs=20, batch_size=512, validation_split = 0.2, callbacks=[early_stop])
+
+def translate(input, tokenizer):
+    input = [input]
+    test_tokenized = eng_token.texts_to_sequences(input)
+    test_padded = pad_sequences(test_tokenized, maxlen=max_eng, padding='post')
+
+    predictions = model.predict(test_padded)[0]
+
+    index_to_words = {id: word for word, id in tokenizer.word_index.items()}
+    index_to_words[0] = ''
+    return ' '.join([index_to_words[prediction] for prediction in np.argmax(predictions, 1)])
+
+
+input = "she is driving the truck"
+
+#Test Your Zaka
+
+
+print('English: '+input)
+print('French: elle conduit le camion')
+print('Predicted: '+translate(input,  fr_token))
