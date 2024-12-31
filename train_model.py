@@ -79,7 +79,16 @@ from keras.callbacks import  EarlyStopping
 
 early_stop = EarlyStopping(monitor = 'val_accuracy', patience = 10)
 final_model = model.fit(eng_padded, fr_padded, epochs=20, batch_size=512, validation_split = 0.2, callbacks=[early_stop])
+# Save the tokenizers
 
+eng_token_json = eng_token.to_json()
+with open('eng_tokenizer.json', 'w') as f:
+    f.write(eng_token_json)
+
+fr_token_json = fr_token.to_json()
+with open('fr_tokenizer.json', 'w') as f:
+    f.write(fr_token_json)
+    
 def translate(input, tokenizer):
     input = [input]
     test_tokenized = eng_token.texts_to_sequences(input)
