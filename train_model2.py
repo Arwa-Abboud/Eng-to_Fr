@@ -61,7 +61,7 @@ from tensorflow.keras.layers import Embedding, LSTM, Dense, RepeatVector, TimeDi
 max_seq_len_fr = max(fr_tokenized_lengths)
 max_seq_len_eng = max(eng_tokenized_lengths)
 model2 = Sequential()
-model2.add(Embedding(eng_vocab, 128, mask_zero=True, input_shape=(max_seq_len_eng,)))
+model2.add(Embedding(eng_vocab, 100, mask_zero=True, input_shape=(max_seq_len_eng,)))
 model2.add(Bidirectional(LSTM(256, return_sequences=False), merge_mode='concat'))
 model2.add(RepeatVector(max_seq_len_fr))
 model2.add(Bidirectional(LSTM(256, return_sequences=True), merge_mode='concat'))
@@ -78,6 +78,15 @@ import matplotlib.pyplot as plt
 
 early_stop = EarlyStopping(monitor = 'val_accuracy', patience = 10)
 final_model2 = model2.fit(eng_padded, fr_padded, epochs=50, batch_size=512, validation_split = 0.3, callbacks=[early_stop])
+
+# Save the tokenizers
+eng_token_json = eng_token.to_json()
+with open('eng_tokenizer.json', 'w') as f:
+    f.write(eng_token_json)
+
+fr_token_json = fr_token.to_json()
+with open('fr_tokenizer.json', 'w') as f:
+    f.write(fr_token_json)
 
 
 def translate2(input, tokenizer):
